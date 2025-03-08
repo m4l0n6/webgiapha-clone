@@ -41,6 +41,9 @@ const Index = () => {
               Phần mềm quản lý gia phả
               <span className="text-blue-600"> chuyên nghiệp</span>
             </h1>
+            <p className="text-2xl text-blue-600 font-semibold">
+              Tạo nhanh gia phả bằng AI chỉ với 2 phút
+            </p>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Giải pháp toàn diện giúp bạn lưu trữ và quản lý thông tin gia phả một cách hiệu quả
             </p>
