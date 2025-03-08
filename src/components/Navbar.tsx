@@ -1,8 +1,8 @@
-
 import { useState, useEffect } from 'react';
 import { Menu, X, Search, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -19,7 +19,6 @@ const Navbar = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    // Xử lý tìm kiếm ở đây
     console.log('Searching for:', searchQuery);
   };
 
@@ -28,7 +27,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0">
-            <span className="text-2xl font-bold text-blue-600">GiaPha</span>
+            <Link to="/" className="text-2xl font-bold text-blue-600">GiaPha</Link>
           </div>
           
           <div className="hidden md:flex items-center space-x-8">
@@ -45,10 +44,12 @@ const Navbar = () => {
             <a href="#features" className="text-gray-700 hover:text-blue-600 transition-colors">Tính năng</a>
             <a href="#preview" className="text-gray-700 hover:text-blue-600 transition-colors">Xem trước</a>
             <a href="#pricing" className="text-gray-700 hover:text-blue-600 transition-colors">Bảng giá</a>
-            <Button variant="outline" className="flex items-center gap-2">
-              <LogIn className="h-4 w-4" />
-              Đăng nhập
-            </Button>
+            <Link to="/auth">
+              <Button variant="outline" className="flex items-center gap-2">
+                <LogIn className="h-4 w-4" />
+                Đăng nhập
+              </Button>
+            </Link>
             <Button className="bg-blue-600 hover:bg-blue-700 text-white">
               Dùng thử miễn phí
             </Button>
@@ -78,10 +79,12 @@ const Navbar = () => {
             <a href="#features" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Tính năng</a>
             <a href="#preview" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Xem trước</a>
             <a href="#pricing" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Bảng giá</a>
-            <Button variant="outline" className="w-full flex items-center justify-center gap-2">
-              <LogIn className="h-4 w-4" />
-              Đăng nhập
-            </Button>
+            <Link to="/auth" className="block w-full">
+              <Button variant="outline" className="w-full flex items-center justify-center gap-2">
+                <LogIn className="h-4 w-4" />
+                Đăng nhập
+              </Button>
+            </Link>
             <Button className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white">
               Dùng thử miễn phí
             </Button>
