@@ -29,7 +29,11 @@ export const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
     formState: { errors, isSubmitting },
   } = useForm<LoginFormValues | RegisterFormValues>({
     resolver: zodResolver(isLogin ? loginSchema : registerSchema),
-  });
+  }) as {
+    register: ReturnType<typeof useForm<LoginFormValues | RegisterFormValues>>['register'];
+    handleSubmit: ReturnType<typeof useForm<LoginFormValues | RegisterFormValues>>['handleSubmit'];
+    formState: { errors: any; isSubmitting: boolean };
+  };
 
   const onSubmit = async (data: LoginFormValues | RegisterFormValues) => {
     console.log('Form submitted:', data);
