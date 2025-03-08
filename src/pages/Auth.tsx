@@ -1,14 +1,25 @@
 
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { AuthForm } from '@/components/AuthForm';
+import { ArrowLeft } from 'lucide-react';
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="fixed top-4 left-4">
+        <Link 
+          to="/" 
+          className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Về trang chủ
+        </Link>
+      </div>
+
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
           {isLogin ? 'Đăng nhập vào tài khoản' : 'Đăng ký tài khoản mới'}
