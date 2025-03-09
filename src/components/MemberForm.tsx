@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -82,12 +81,12 @@ const MemberForm = ({ member, onSubmit, onClose, availableMembers = [] }: Member
           <div>
             <label className="block text-sm font-medium mb-1">Cha/Mẹ</label>
             <Select
-              value={formData.relationship?.parentId}
+              value={formData.relationship?.parentId || "none"}
               onValueChange={(value) => setFormData({
                 ...formData,
                 relationship: {
                   ...formData.relationship,
-                  parentId: value
+                  parentId: value === "none" ? undefined : value
                 }
               })}
             >
@@ -95,7 +94,7 @@ const MemberForm = ({ member, onSubmit, onClose, availableMembers = [] }: Member
                 <SelectValue placeholder="Chọn cha/mẹ" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Không có</SelectItem>
+                <SelectItem value="none">Không có</SelectItem>
                 {eligibleParents.map((m) => (
                   <SelectItem key={m.id} value={m.id}>
                     {m.name}
@@ -107,12 +106,12 @@ const MemberForm = ({ member, onSubmit, onClose, availableMembers = [] }: Member
           <div>
             <label className="block text-sm font-medium mb-1">Vợ/Chồng</label>
             <Select
-              value={formData.relationship?.spouseId}
+              value={formData.relationship?.spouseId || "none"}
               onValueChange={(value) => setFormData({
                 ...formData,
                 relationship: {
                   ...formData.relationship,
-                  spouseId: value
+                  spouseId: value === "none" ? undefined : value
                 }
               })}
             >
@@ -120,7 +119,7 @@ const MemberForm = ({ member, onSubmit, onClose, availableMembers = [] }: Member
                 <SelectValue placeholder="Chọn vợ/chồng" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Không có</SelectItem>
+                <SelectItem value="none">Không có</SelectItem>
                 {eligibleSpouses.map((m) => (
                   <SelectItem key={m.id} value={m.id}>
                     {m.name}
