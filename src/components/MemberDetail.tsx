@@ -1,10 +1,9 @@
-
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Edit2 } from 'lucide-react';
 import { useState } from 'react';
 import MemberForm from './MemberForm';
-import type { FamilyMember } from '@/pages/FamilyTree';
+import type { FamilyMember } from '@/types/family';
 
 interface MemberDetailProps {
   member: FamilyMember;

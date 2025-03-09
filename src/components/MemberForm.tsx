@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import type { FamilyMember } from '@/pages/FamilyTree';
+import type { FamilyMember } from '@/types/family';
 
 interface MemberFormProps {
   member?: FamilyMember;

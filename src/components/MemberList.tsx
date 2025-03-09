@@ -1,8 +1,7 @@
-
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
-import type { FamilyMember } from '@/pages/FamilyTree';
+import type { FamilyMember } from '@/types/family';
 
 interface MemberListProps {
   members: FamilyMember[];
