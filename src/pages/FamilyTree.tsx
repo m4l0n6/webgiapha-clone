@@ -10,8 +10,8 @@ import {
   useNodesState,
   useEdgesState,
   addEdge,
-} from '@xyflow/react';
-import '@xyflow/react/dist/style.css';
+} from 'reactflow';
+import 'reactflow/dist/style.css';
 import MemberForm from '@/components/MemberForm';
 import MemberList from '@/components/MemberList';
 import MemberDetail from '@/components/MemberDetail';
