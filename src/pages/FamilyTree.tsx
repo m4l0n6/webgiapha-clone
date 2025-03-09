@@ -1,46 +1,15 @@
 
 import { useState, useEffect } from 'react';
-import { Square } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import {
-  ReactFlow,
-  MiniMap,
-  Controls,
-  Background,
-  useNodesState,
-  useEdgesState,
-  addEdge,
-} from 'reactflow';
+import { ReactFlow, MiniMap, Controls, Background, useNodesState, useEdgesState } from 'reactflow';
 import 'reactflow/dist/style.css';
 import MemberForm from '@/components/MemberForm';
-import MemberList from '@/components/MemberList';
-import MemberDetail from '@/components/MemberDetail';
-
-export interface FamilyMember {
-  id: string;
-  name: string;
-  birthYear?: string;
-  deathYear?: string;
-  imageUrl?: string;
-  additionalInfo?: string;
-  relationship?: {
-    parentId?: string;
-    spouseId?: string;
-    childrenIds?: string[];
-  };
-}
-
-interface FlowNode {
-  id: string;
-  type: string;
-  data: { label: string; member: FamilyMember };
-  position: { x: number; y: number };
-}
+import type { FamilyMember } from '@/types/family';
 
 const FamilyTree = () => {
   const [members, setMembers] = useState<FamilyMember[]>([]);
-  const [selectedMember, setSelectedMember] = useState<FamilyMember | null>(null);
-  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [newMemberName, setNewMemberName] = useState('');
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
@@ -51,127 +20,73 @@ const FamilyTree = () => {
     }
   }, []);
 
-  useEffect(() => {
-    // Convert members to nodes and edges
-    const flowNodes: FlowNode[] = members.map((member, index) => ({
-      id: member.id,
-      type: 'default',
-      data: { 
-        label: `${member.name}\n${member.birthYear || ''} - ${member.deathYear || 'nay'}`,
-        member 
-      },
-      position: { x: index * 200, y: 0 },
-    }));
+  const handleAddFirstMember = () => {
+    if (!newMemberName.trim()) return;
 
-    const flowEdges = members.flatMap(member => {
-      const edges = [];
-      if (member.relationship?.parentId) {
-        edges.push({
-          id: `${member.relationship.parentId}-${member.id}`,
-          source: member.relationship.parentId,
-          target: member.id,
-          animated: true,
-        });
+    const newMember: FamilyMember = {
+      id: crypto.randomUUID(),
+      name: newMemberName,
+      relationship: {
+        parentId: undefined,
+        spouseId: undefined,
+        childrenIds: [],
       }
-      if (member.relationship?.spouseId) {
-        edges.push({
-          id: `${member.id}-${member.relationship.spouseId}`,
-          source: member.id,
-          target: member.relationship.spouseId,
-          type: 'straight',
-          style: { strokeDasharray: '5,5' },
-        });
-      }
-      return edges;
-    });
+    };
 
-    setNodes(flowNodes);
-    setEdges(flowEdges);
-  }, [members, setNodes, setEdges]);
-
-  const saveMembersToStorage = (updatedMembers: FamilyMember[]) => {
-    localStorage.setItem('familyMembers', JSON.stringify(updatedMembers));
-  };
-
-  const handleAddMember = (member: FamilyMember) => {
-    const newMembers = [...members, member];
-    setMembers(newMembers);
-    saveMembersToStorage(newMembers);
-    setIsFormOpen(false);
-  };
-
-  const handleUpdateMember = (updatedMember: FamilyMember) => {
-    const newMembers = members.map(member =>
-      member.id === updatedMember.id ? updatedMember : member
-    );
-    setMembers(newMembers);
-    saveMembersToStorage(newMembers);
-    setSelectedMember(null);
-  };
-
-  const handleDeleteMember = (id: string) => {
-    const newMembers = members.filter(member => member.id !== id);
-    setMembers(newMembers);
-    saveMembersToStorage(newMembers);
-    setSelectedMember(null);
+    setMembers([...members, newMember]);
+    setNewMemberName('');
+    localStorage.setItem('familyMembers', JSON.stringify([...members, newMember]));
   };
 
   return (
-    <div className="min-h-screen bg-[#F6F6F7]">
-      <div className="max-w-7xl mx-auto p-6">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Quản lý gia phả</h1>
-          <Button onClick={() => setIsFormOpen(true)}>Thêm thành viên mới</Button>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="md:col-span-2">
-            <MemberList
-              members={members}
-              onSelect={setSelectedMember}
-              onDelete={handleDeleteMember}
+    <div className="min-h-screen bg-[#F6F6F7] p-6">
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-[#EEF1FF] rounded-lg p-6 mb-8">
+          <h2 className="text-center text-lg font-medium mb-4">
+            Nhập tên thành viên đầu tiên để Tạo cây mới
+          </h2>
+          <div className="flex gap-2 max-w-xl mx-auto">
+            <Input
+              value={newMemberName}
+              onChange={(e) => setNewMemberName(e.target.value)}
+              placeholder="Nhập tên thành viên"
+              className="flex-1"
             />
-          </div>
-          <div>
-            {selectedMember ? (
-              <MemberDetail
-                member={selectedMember}
-                onUpdate={handleUpdateMember}
-                onClose={() => setSelectedMember(null)}
-                availableMembers={members.filter(m => m.id !== selectedMember.id)}
-              />
-            ) : (
-              <div className="bg-white p-6 rounded-lg shadow">
-                <div className="flex items-center justify-center h-40">
-                  <Square className="h-16 w-16 text-gray-300" />
-                  <p className="text-gray-500 mt-4">Chọn thành viên để xem chi tiết</p>
-                </div>
-              </div>
-            )}
+            <Button 
+              onClick={handleAddFirstMember}
+              className="bg-[#3AB60B] hover:bg-[#2E9907]"
+            >
+              Tạo Cây
+            </Button>
           </div>
         </div>
 
-        <div className="mt-8 bg-white rounded-lg shadow p-4" style={{ height: '400px' }}>
-          <h2 className="text-xl font-semibold mb-4">Sơ đồ gia phả</h2>
-          <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            fitView
-          >
-            <Background />
-            <Controls />
-            <MiniMap />
-          </ReactFlow>
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-center mb-4">Danh sách cây</h1>
+          <p className="text-center text-gray-600">
+            Có {members.length} cây với tổng số {members.length} thành viên (giới hạn {' '}
+            <span className="font-semibold">100</span>, nâng giới hạn{' '}
+            <a href="#" className="text-blue-500 hover:underline">
+              Tại đây
+            </a>
+            )
+          </p>
         </div>
 
-        {isFormOpen && (
-          <MemberForm
-            onSubmit={handleAddMember}
-            onClose={() => setIsFormOpen(false)}
-            availableMembers={members}
-          />
+        {members.length > 0 && (
+          <div className="bg-white rounded-lg shadow p-4" style={{ height: '400px' }}>
+            <ReactFlow
+              nodes={nodes}
+              edges={edges}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              fitView
+            >
+              <Background />
+              <Controls />
+              <MiniMap />
+            </ReactFlow>
+          </div>
         )}
       </div>
     </div>
