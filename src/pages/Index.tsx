@@ -1,8 +1,8 @@
-
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, CheckCircle, Download, Users, FileText, Settings } from 'lucide-react';
+import { ArrowRight, CheckCircle, Users, FileText, Settings } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const features = [
   {
@@ -24,6 +24,7 @@ const features = [
 
 const Index = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsVisible(true);
@@ -47,14 +48,14 @@ const Index = () => {
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Giải pháp toàn diện giúp bạn lưu trữ và quản lý thông tin gia phả một cách hiệu quả
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+            <div className="flex justify-center pt-6">
+              <Button 
+                size="lg" 
+                className="bg-blue-600 hover:bg-blue-700"
+                onClick={() => navigate('/family-tree')}
+              >
                 Dùng thử miễn phí
                 <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button size="lg" variant="outline">
-                <Download className="mr-2 h-5 w-5" />
-                Tải xuống
               </Button>
             </div>
           </div>
@@ -125,7 +126,12 @@ const Index = () => {
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
             Hãy để chúng tôi giúp bạn lưu giữ và phát triển gia phả của gia đình
           </p>
-          <Button size="lg" variant="secondary" className="hover:bg-white/90">
+          <Button 
+            size="lg" 
+            variant="secondary" 
+            className="hover:bg-white/90"
+            onClick={() => navigate('/family-tree')}
+          >
             Dùng thử miễn phí
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
