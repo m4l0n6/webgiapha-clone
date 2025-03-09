@@ -2,6 +2,16 @@
 import { useState, useEffect } from 'react';
 import { Square } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import {
+  ReactFlow,
+  MiniMap,
+  Controls,
+  Background,
+  useNodesState,
+  useEdgesState,
+  addEdge,
+} from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
 import MemberForm from '@/components/MemberForm';
 import MemberList from '@/components/MemberList';
 import MemberDetail from '@/components/MemberDetail';
@@ -13,12 +23,26 @@ export interface FamilyMember {
   deathYear?: string;
   imageUrl?: string;
   additionalInfo?: string;
+  relationship?: {
+    parentId?: string;
+    spouseId?: string;
+    childrenIds?: string[];
+  };
+}
+
+interface FlowNode {
+  id: string;
+  type: string;
+  data: { label: string; member: FamilyMember };
+  position: { x: number; y: number };
 }
 
 const FamilyTree = () => {
   const [members, setMembers] = useState<FamilyMember[]>([]);
   const [selectedMember, setSelectedMember] = useState<FamilyMember | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   useEffect(() => {
     const savedMembers = localStorage.getItem('familyMembers');
@@ -26,6 +50,44 @@ const FamilyTree = () => {
       setMembers(JSON.parse(savedMembers));
     }
   }, []);
+
+  useEffect(() => {
+    // Convert members to nodes and edges
+    const flowNodes: FlowNode[] = members.map((member, index) => ({
+      id: member.id,
+      type: 'default',
+      data: { 
+        label: `${member.name}\n${member.birthYear || ''} - ${member.deathYear || 'nay'}`,
+        member 
+      },
+      position: { x: index * 200, y: 0 },
+    }));
+
+    const flowEdges = members.flatMap(member => {
+      const edges = [];
+      if (member.relationship?.parentId) {
+        edges.push({
+          id: `${member.relationship.parentId}-${member.id}`,
+          source: member.relationship.parentId,
+          target: member.id,
+          animated: true,
+        });
+      }
+      if (member.relationship?.spouseId) {
+        edges.push({
+          id: `${member.id}-${member.relationship.spouseId}`,
+          source: member.id,
+          target: member.relationship.spouseId,
+          type: 'straight',
+          style: { strokeDasharray: '5,5' },
+        });
+      }
+      return edges;
+    });
+
+    setNodes(flowNodes);
+    setEdges(flowEdges);
+  }, [members, setNodes, setEdges]);
 
   const saveMembersToStorage = (updatedMembers: FamilyMember[]) => {
     localStorage.setItem('familyMembers', JSON.stringify(updatedMembers));
@@ -76,6 +138,7 @@ const FamilyTree = () => {
                 member={selectedMember}
                 onUpdate={handleUpdateMember}
                 onClose={() => setSelectedMember(null)}
+                availableMembers={members.filter(m => m.id !== selectedMember.id)}
               />
             ) : (
               <div className="bg-white p-6 rounded-lg shadow">
@@ -88,10 +151,26 @@ const FamilyTree = () => {
           </div>
         </div>
 
+        <div className="mt-8 bg-white rounded-lg shadow p-4" style={{ height: '400px' }}>
+          <h2 className="text-xl font-semibold mb-4">Sơ đồ gia phả</h2>
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            fitView
+          >
+            <Background />
+            <Controls />
+            <MiniMap />
+          </ReactFlow>
+        </div>
+
         {isFormOpen && (
           <MemberForm
             onSubmit={handleAddMember}
             onClose={() => setIsFormOpen(false)}
+            availableMembers={members}
           />
         )}
       </div>

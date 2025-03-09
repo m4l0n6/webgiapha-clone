@@ -10,9 +10,10 @@ interface MemberDetailProps {
   member: FamilyMember;
   onUpdate: (member: FamilyMember) => void;
   onClose: () => void;
+  availableMembers: FamilyMember[];
 }
 
-const MemberDetail = ({ member, onUpdate, onClose }: MemberDetailProps) => {
+const MemberDetail = ({ member, onUpdate, onClose, availableMembers }: MemberDetailProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
   if (isEditing) {
@@ -24,9 +25,13 @@ const MemberDetail = ({ member, onUpdate, onClose }: MemberDetailProps) => {
           setIsEditing(false);
         }}
         onClose={() => setIsEditing(false)}
+        availableMembers={availableMembers}
       />
     );
   }
+
+  const parent = availableMembers.find(m => m.id === member.relationship?.parentId);
+  const spouse = availableMembers.find(m => m.id === member.relationship?.spouseId);
 
   return (
     <Card className="p-6">
@@ -57,6 +62,14 @@ const MemberDetail = ({ member, onUpdate, onClose }: MemberDetailProps) => {
         <div>
           <label className="text-sm text-gray-500">Năm mất</label>
           <p className="font-medium">{member.deathYear || 'Còn sống'}</p>
+        </div>
+        <div>
+          <label className="text-sm text-gray-500">Quan hệ gia đình</label>
+          <div className="mt-1">
+            {parent && <p>Cha/Mẹ: {parent.name}</p>}
+            {spouse && <p>Vợ/Chồng: {spouse.name}</p>}
+            {!parent && !spouse && <p>Chưa thiết lập quan hệ</p>}
+          </div>
         </div>
         {member.additionalInfo && (
           <div>
