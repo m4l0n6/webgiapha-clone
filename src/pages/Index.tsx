@@ -1,25 +1,55 @@
-import { useState, useEffect } from 'react';
-import Navbar from '@/components/Navbar';
-import { Button } from '@/components/ui/button';
-import { ArrowRight, CheckCircle, Users, FileText, Settings } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import Navbar from "@/components/Navbar";
+import { Button } from "@/components/ui/button";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import {
+  ArrowRight,
+  CheckCircle,
+  Users,
+  FileText,
+  Settings,
+  UserRoundPlus,
+} from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useNavigate } from "react-router-dom";
 
 const features = [
   {
-    icon: <FileText className="h-6 w-6 text-blue-600" />,
+    icon: <UserRoundPlus className="w-6 h-6 text-blue-600" />,
+    title: "Tạo gia phả",
+    description:
+      "Tạo gia phả chỉ với vài bước đơn giản và nhanh chóng bằng công nghệ AI",
+  },
+  {
+    icon: <FileText className="w-6 h-6 text-blue-600" />,
     title: "Lưu trữ thông tin gia phả",
-    description: "Dễ dàng lưu trữ và quản lý thông tin gia phả của gia đình bạn"
+    description:
+      "Dễ dàng lưu trữ và quản lý thông tin gia phả của gia đình bạn",
   },
   {
-    icon: <Users className="h-6 w-6 text-blue-600" />,
+    icon: <Users className="w-6 h-6 text-blue-600" />,
     title: "Quản lý thành viên",
-    description: "Theo dõi và cập nhật thông tin của các thành viên trong gia đình"
+    description:
+      "Theo dõi và cập nhật thông tin của các thành viên trong gia đình",
   },
   {
-    icon: <Settings className="h-6 w-6 text-blue-600" />,
+    icon: <Settings className="w-6 h-6 text-blue-600" />,
     title: "Tùy chỉnh linh hoạt",
-    description: "Tùy chỉnh giao diện và thông tin hiển thị theo ý muốn"
-  }
+    description: "Tùy chỉnh giao diện và thông tin hiển thị theo ý muốn",
+  },
+];
+
+const previewImages = [
+  "https://images.unsplash.com/photo-1655185497013-db98aca061d3",
+  "https://images.unsplash.com/photo-1643869355390-4dcffc63d049",
 ];
 
 const Index = () => {
@@ -33,29 +63,30 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       <Navbar />
-      
+
       {/* Hero Section */}
-      <section className="hero-gradient pt-32 pb-20 px-4">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className={`space-y-6 ${isVisible ? 'fade-in' : ''}`}>
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 leading-tight">
+      <section className="px-4 pt-32 pb-20 hero-gradient">
+        <div className="mx-auto max-w-7xl text-center">
+          <div className={`space-y-6 ${isVisible ? "fade-in" : ""}`}>
+            <h1 className="font-bold text-gray-900 text-4xl md:text-6xl leading-tight">
               Phần mềm quản lý gia phả
               <span className="text-blue-600"> chuyên nghiệp</span>
             </h1>
-            <p className="text-2xl text-blue-600 font-semibold">
+            <p className="font-semibold text-blue-600 text-2xl">
               Tạo nhanh gia phả bằng AI chỉ với 2 phút
             </p>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Giải pháp toàn diện giúp bạn lưu trữ và quản lý thông tin gia phả một cách hiệu quả
+            <p className="mx-auto max-w-2xl text-gray-600 text-xl">
+              Giải pháp toàn diện giúp bạn lưu trữ và quản lý thông tin gia phả
+              một cách hiệu quả
             </p>
             <div className="flex justify-center pt-6">
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="bg-blue-600 hover:bg-blue-700"
-                onClick={() => navigate('/family-tree')}
+                onClick={() => navigate("/family-tree")}
               >
                 Dùng thử miễn phí
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </div>
           </div>
@@ -63,32 +94,28 @@ const Index = () => {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 px-4 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+      <section id="features" className="bg-white px-4 py-20">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-16 text-center">
+            <h2 className="mb-4 font-bold text-gray-900 text-3xl md:text-4xl">
               Tính năng nổi bật
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Khám phá các tính năng mạnh mẽ giúp bạn quản lý gia phả một cách hiệu quả
+            <p className="mx-auto max-w-2xl text-gray-600">
+              Khám phá các tính năng mạnh mẽ giúp bạn quản lý gia phả một cách
+              hiệu quả
             </p>
           </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
+
+          <div className="gap-8 grid md:grid-cols-4">
             {features.map((feature, index) => (
-              <div
-                key={index}
-                className="glass-card p-6 rounded-xl hover-lift"
-              >
-                <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-blue-50 mb-4">
+              <div key={index} className="p-6 rounded-xl glass-card hover-lift">
+                <div className="flex justify-center items-center bg-blue-50 mb-4 rounded-lg w-12 h-12">
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                <h3 className="mb-2 font-semibold text-gray-900 text-xl">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600">
-                  {feature.description}
-                </p>
+                <p className="text-gray-600">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -96,45 +123,88 @@ const Index = () => {
       </section>
 
       {/* Preview Section */}
-      <section id="preview" className="py-20 px-4 bg-gray-50">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+      <section id="preview" className="bg-gray-50 px-4 py-20">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-16 text-center">
+            <h2 className="mb-4 font-bold text-gray-900 text-3xl md:text-4xl">
               Xem trước phần mềm
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="mx-auto max-w-2xl text-gray-600">
               Trải nghiệm giao diện người dùng thân thiện và dễ sử dụng
             </p>
           </div>
-          
-          <div className="glass-card rounded-xl overflow-hidden shadow-2xl">
-            <img
-              src="https://images.unsplash.com/photo-1460925895917-afdab827c52f"
-              alt="Preview"
-              className="w-full object-cover"
-            />
-          </div>
+          <Carousel className="mx-auto w-full max-w-4xl">
+            <CarouselContent>
+              {Array.from({ length: 2 }).map((_, index) => (
+                <CarouselItem key={index}>
+                  <AspectRatio ratio={16 / 9}>
+                    <img
+                      src={previewImages[index]}
+                      alt="Preview"
+                      className="w-full object-cover"
+                    />
+                  </AspectRatio>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-blue-600 text-white">
-        <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+      <section className="bg-blue-600 px-4 py-20 text-white">
+        <div className="mx-auto max-w-7xl text-center">
+          <h2 className="mb-6 font-bold text-3xl md:text-4xl">
             Bắt đầu sử dụng ngay hôm nay
           </h2>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+          <p className="mx-auto mb-8 max-w-2xl text-blue-100 text-xl">
             Hãy để chúng tôi giúp bạn lưu giữ và phát triển gia phả của gia đình
           </p>
-          <Button 
-            size="lg" 
-            variant="secondary" 
+          <Button
+            size="lg"
+            variant="secondary"
             className="hover:bg-white/90"
-            onClick={() => navigate('/family-tree')}
+            onClick={() => navigate("/auth")}
           >
-            Dùng thử miễn phí
-            <ArrowRight className="ml-2 h-5 w-5" />
+            Đăng nhập ngay
+            <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
+        </div>
+      </section>
+
+      <section id="contact" className="bg-gray-50 px-4 py-20">
+        <div className="mx-auto max-w-7xl text-center">
+          <h2 className="mb-6 font-bold text-3xl md:text-4xl">Liên hệ ngay</h2>
+          <div>
+            <h3>Nhập thông tin và nội dụng muốn tư vấn</h3>
+            <form action="" className="space-y-4">
+              <div>
+                <Input
+                  type="text"
+                  placeholder="Họ và tên"
+                  className="mx-auto max-w-md"
+                />
+              </div>
+              <div>
+                <Input
+                  type="text"
+                  placeholder="Email"
+                  className="mx-auto max-w-md"
+                />
+              </div>
+              <div>
+                <Textarea
+                  placeholder="Nội dung"
+                  className="mx-auto max-w-md"
+                ></Textarea>
+              </div>
+              <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+                Gửi
+              </Button>
+            </form>
+          </div>
         </div>
       </section>
     </div>
