@@ -37,7 +37,7 @@ const FamilyTree = () => {
               disabled
             />
             <Button
-              className="bg-[#3AB60B] hover:bg-[#2E9907]"
+              className="bg-[#0EA5E9] hover:bg-[#0EA5E9]/90"
               disabled
             >
               Tạo Cây
@@ -49,7 +49,7 @@ const FamilyTree = () => {
           <div className="flex justify-between items-center mb-4">
             <h1 className="font-bold text-2xl">Danh sách thành viên</h1>
             <Button
-              className="bg-[#3AB60B] hover:bg-[#2E9907]"
+              className="bg-[#0EA5E9] hover:bg-[#0EA5E9]/90"
               disabled
             >
               <UserPlus className="mr-2 w-4 h-4" />
