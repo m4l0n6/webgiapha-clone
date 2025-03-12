@@ -9,6 +9,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { AuthError } from "@supabase/supabase-js";
 
 const loginSchema = z.object({
   email: z.string().email("Email không hợp lệ"),
@@ -28,6 +29,8 @@ const registerSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
+type FormValues = LoginFormValues | RegisterFormValues;
+
 export const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -35,12 +38,12 @@ export const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<LoginFormValues | RegisterFormValues>({
+    formState: { errors },
+  } = useForm<FormValues>({
     resolver: zodResolver(isLogin ? loginSchema : registerSchema),
   });
 
-  const onSubmit = async (data: LoginFormValues | RegisterFormValues) => {
+  const onSubmit = async (data: FormValues) => {
     try {
       if (isLogin) {
         const { error } = await supabase.auth.signInWithPassword({
@@ -53,16 +56,17 @@ export const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
         toast.success("Đăng nhập thành công!");
         navigate("/family-tree");
       } else {
+        const registerData = data as RegisterFormValues;
         const { error } = await supabase.auth.signUp({
-          email: data.email,
-          password: data.password,
+          email: registerData.email,
+          password: registerData.password,
           options: {
             data: {
-              full_name: (data as RegisterFormValues).fullName,
-              family_name: (data as RegisterFormValues).familyName,
-              phone: (data as RegisterFormValues).phone,
-              birth_date: (data as RegisterFormValues).birthDate,
-              gender: (data as RegisterFormValues).gender,
+              full_name: registerData.fullName,
+              family_name: registerData.familyName,
+              phone: registerData.phone,
+              birth_date: registerData.birthDate,
+              gender: registerData.gender,
             },
           },
         });
@@ -72,7 +76,11 @@ export const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
         toast.success("Đăng ký thành công! Vui lòng kiểm tra email để xác nhận tài khoản.");
       }
     } catch (error) {
-      toast.error(error.message);
+      if (error instanceof AuthError) {
+        toast.error(error.message);
+      } else {
+        toast.error("Đã xảy ra lỗi. Vui lòng thử lại sau.");
+      }
     }
   };
 
@@ -137,7 +145,7 @@ export const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
               placeholder="Nhập họ và tên"
             />
             {errors.fullName && (
-              <p className="mt-1 text-sm text-red-600">{errors.fullName.message}</p>
+              <p className="mt-1 text-sm text-red-600">{(errors as any).fullName?.message}</p>
             )}
           </div>
 
@@ -153,7 +161,7 @@ export const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
               placeholder="Nhập tên dòng họ"
             />
             {errors.familyName && (
-              <p className="mt-1 text-sm text-red-600">{errors.familyName.message}</p>
+              <p className="mt-1 text-sm text-red-600">{(errors as any).familyName?.message}</p>
             )}
           </div>
 
@@ -169,7 +177,7 @@ export const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
               placeholder="Nhập số điện thoại"
             />
             {errors.phone && (
-              <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
+              <p className="mt-1 text-sm text-red-600">{(errors as any).phone?.message}</p>
             )}
           </div>
 
@@ -184,7 +192,7 @@ export const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
               className="mt-1"
             />
             {errors.birthDate && (
-              <p className="mt-1 text-sm text-red-600">{errors.birthDate.message}</p>
+              <p className="mt-1 text-sm text-red-600">{(errors as any).birthDate?.message}</p>
             )}
           </div>
 
@@ -203,7 +211,7 @@ export const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
               <option value="other">Khác</option>
             </select>
             {errors.gender && (
-              <p className="mt-1 text-sm text-red-600">{errors.gender.message}</p>
+              <p className="mt-1 text-sm text-red-600">{(errors as any).gender?.message}</p>
             )}
           </div>
         </>
@@ -212,7 +220,6 @@ export const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
       <Button
         type="submit"
         className="w-full bg-blue-600 hover:bg-blue-700"
-        disabled={isSubmitting}
       >
         {isLogin ? "Đăng nhập" : "Đăng ký"}
       </Button>
