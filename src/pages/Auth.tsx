@@ -14,7 +14,8 @@ const Auth = () => {
   const { user } = useAuth();
   
   if (user) {
-    navigate('/family-tree');
+    const username = user.user_metadata?.full_name || 'default';
+    navigate(`/dashboard/${username}/family-tree`);
     return null;
   }
 

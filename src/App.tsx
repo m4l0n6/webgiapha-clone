@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import FamilyTree from "./pages/FamilyTree";
+import Dashboard from "./pages/Dashboard";
 import { useAuth } from "@/contexts/AuthContext";
 
 const queryClient = new QueryClient();
@@ -38,13 +39,17 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
             <Route 
-              path="/family-tree" 
+              path="/dashboard/:username" 
               element={
                 <PrivateRoute>
-                  <FamilyTree />
+                  <Dashboard />
                 </PrivateRoute>
-              } 
-            />
+              }
+            >
+              <Route path="family-tree" element={<FamilyTree />} />
+              <Route path="genealogy" element={<div>Phả hệ - Coming soon</div>} />
+              <Route path="members" element={<div>Danh sách thành viên - Coming soon</div>} />
+            </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
