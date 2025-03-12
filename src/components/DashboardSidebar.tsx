@@ -1,7 +1,7 @@
 
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Tree, GitFork, Users } from "lucide-react";
+import { Trees, GitFork, Users } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 export const DashboardSidebar = () => {
@@ -12,7 +12,7 @@ export const DashboardSidebar = () => {
   const menuItems = [
     {
       title: "Phả đồ",
-      icon: Tree,
+      icon: Trees,
       path: `/dashboard/${username}/family-tree`,
     },
     {
