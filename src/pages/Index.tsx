@@ -23,12 +23,6 @@ import { useNavigate } from "react-router-dom";
 
 const features = [
   {
-    icon: <UserRoundPlus className="w-6 h-6 text-blue-600" />,
-    title: "Tạo gia phả",
-    description:
-      "Tạo gia phả chỉ với vài bước đơn giản và nhanh chóng bằng công nghệ AI",
-  },
-  {
     icon: <FileText className="w-6 h-6 text-blue-600" />,
     title: "Lưu trữ thông tin gia phả",
     description:
@@ -72,9 +66,6 @@ const Index = () => {
               Phần mềm quản lý gia phả
               <span className="text-blue-600"> chuyên nghiệp</span>
             </h1>
-            <p className="font-semibold text-blue-600 text-2xl">
-              Tạo nhanh gia phả bằng AI chỉ với 2 phút
-            </p>
             <p className="mx-auto max-w-2xl text-gray-600 text-xl">
               Giải pháp toàn diện giúp bạn lưu trữ và quản lý thông tin gia phả
               một cách hiệu quả
@@ -85,7 +76,7 @@ const Index = () => {
                 className="bg-blue-600 hover:bg-blue-700"
                 onClick={() => navigate("/family-tree")}
               >
-                Dùng thử miễn phí
+                Dùng thử ngay
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </div>
@@ -106,7 +97,7 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="gap-8 grid md:grid-cols-4">
+          <div className="gap-8 grid md:grid-cols-3">
             {features.map((feature, index) => (
               <div key={index} className="p-6 rounded-xl glass-card hover-lift">
                 <div className="flex justify-center items-center bg-blue-50 mb-4 rounded-lg w-12 h-12">
@@ -178,7 +169,9 @@ const Index = () => {
         <div className="mx-auto max-w-7xl text-center">
           <h2 className="mb-6 font-bold text-3xl md:text-4xl">Liên hệ ngay</h2>
           <div>
-            <h3>Nhập thông tin và nội dụng muốn tư vấn</h3>
+            <p className="mx-auto mb-6 max-w-2xl text-xl">
+              Nhập thông tin và nội dụng muốn tư vấn
+            </p>
             <form action="" className="space-y-4">
               <div>
                 <Input
