@@ -144,8 +144,10 @@ export const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
               className="mt-1"
               placeholder="Nhập họ và tên"
             />
-            {errors.fullName && (
-              <p className="mt-1 text-sm text-red-600">{(errors as any).fullName?.message}</p>
+            {!isLogin && (errors as FieldErrors<RegisterFormValues>).fullName && (
+              <p className="mt-1 text-sm text-red-600">
+                {(errors as FieldErrors<RegisterFormValues>).fullName?.message}
+              </p>
             )}
           </div>
 
@@ -160,8 +162,10 @@ export const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
               className="mt-1"
               placeholder="Nhập tên dòng họ"
             />
-            {errors.familyName && (
-              <p className="mt-1 text-sm text-red-600">{(errors as any).familyName?.message}</p>
+            {!isLogin && (errors as FieldErrors<RegisterFormValues>).familyName && (
+              <p className="mt-1 text-sm text-red-600">
+                {(errors as FieldErrors<RegisterFormValues>).familyName?.message}
+              </p>
             )}
           </div>
 
@@ -176,8 +180,10 @@ export const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
               className="mt-1"
               placeholder="Nhập số điện thoại"
             />
-            {errors.phone && (
-              <p className="mt-1 text-sm text-red-600">{(errors as any).phone?.message}</p>
+            {!isLogin && (errors as FieldErrors<RegisterFormValues>).phone && (
+              <p className="mt-1 text-sm text-red-600">
+                {(errors as FieldErrors<RegisterFormValues>).phone?.message}
+              </p>
             )}
           </div>
 
@@ -191,8 +197,10 @@ export const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
               {...register("birthDate")}
               className="mt-1"
             />
-            {errors.birthDate && (
-              <p className="mt-1 text-sm text-red-600">{(errors as any).birthDate?.message}</p>
+            {!isLogin && (errors as FieldErrors<RegisterFormValues>).birthDate && (
+              <p className="mt-1 text-sm text-red-600">
+                {(errors as FieldErrors<RegisterFormValues>).birthDate?.message}
+              </p>
             )}
           </div>
 
@@ -210,8 +218,10 @@ export const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
               <option value="female">Nữ</option>
               <option value="other">Khác</option>
             </select>
-            {errors.gender && (
-              <p className="mt-1 text-sm text-red-600">{(errors as any).gender?.message}</p>
+            {!isLogin && (errors as FieldErrors<RegisterFormValues>).gender && (
+              <p className="mt-1 text-sm text-red-600">
+                {(errors as FieldErrors<RegisterFormValues>).gender?.message}
+              </p>
             )}
           </div>
         </>
