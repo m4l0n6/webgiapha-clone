@@ -1,10 +1,8 @@
-
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, UserPlus, List } from "lucide-react";
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { CreateMemberForm } from "@/components/CreateMemberForm";
 
 const FamilyTree = () => {
   const [isCreateMember, setIsCreateMember] = useState(false);
@@ -46,7 +44,7 @@ const FamilyTree = () => {
         {isCreateMember ? (
           <div className="bg-white rounded-lg shadow p-6">
             <h2 className="text-xl font-semibold mb-4">Thêm thành viên mới</h2>
-            {/* CreateMemberForm component will be added here later */}
+            <CreateMemberForm onSuccess={() => setIsCreateMember(false)} />
           </div>
         ) : (
           <div className="bg-white rounded-lg shadow p-6 text-center">
