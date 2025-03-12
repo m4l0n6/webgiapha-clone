@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
@@ -19,7 +21,6 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useNavigate } from "react-router-dom";
 
 const features = [
   {
@@ -49,10 +50,18 @@ const previewImages = [
 const Index = () => {
   const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
+    if (user) {
+      const username = user.user_metadata?.full_name || 'default';
+      navigate(`/dashboard/${username}/family-tree`);
+      return;
+    }
     setIsVisible(true);
-  }, []);
+  }, [user, navigate]);
+
+  if (!isVisible) return null;
 
   return (
     <div className="min-h-screen">
@@ -170,7 +179,7 @@ const Index = () => {
           <h2 className="mb-6 font-bold text-3xl md:text-4xl">Liên hệ ngay</h2>
           <div>
             <p className="mx-auto mb-6 max-w-2xl text-xl">
-              Nhập thông tin và nội dụng muốn tư vấn
+              Nhập thông tin và nội dung muốn tư vấn
             </p>
             <form action="" className="space-y-4">
               <div>
