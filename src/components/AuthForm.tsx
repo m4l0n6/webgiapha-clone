@@ -32,6 +32,7 @@ type FormValues = LoginFormValues | RegisterFormValues;
 
 export const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const {
@@ -44,13 +45,20 @@ export const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
 
   const onSubmit = async (data: FormValues) => {
     try {
+      setIsLoading(true);
+      
       if (isLogin) {
         const { error } = await supabase.auth.signInWithPassword({
           email: data.email,
           password: data.password,
         });
 
-        if (error) throw error;
+        if (error) {
+          if (error.message === 'Invalid login credentials') {
+            throw new Error('Email hoặc mật khẩu không chính xác');
+          }
+          throw error;
+        }
         
         toast.success("Đăng nhập thành công!");
         navigate("/family-tree");
@@ -70,16 +78,23 @@ export const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
           },
         });
 
-        if (error) throw error;
+        if (error) {
+          if (error.message === 'User already registered') {
+            throw new Error('Email đã được đăng ký');
+          }
+          throw error;
+        }
         
         toast.success("Đăng ký thành công! Vui lòng kiểm tra email để xác nhận tài khoản.");
       }
     } catch (error) {
-      if (error instanceof AuthError) {
+      if (error instanceof Error) {
         toast.error(error.message);
       } else {
         toast.error("Đã xảy ra lỗi. Vui lòng thử lại sau.");
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -229,8 +244,9 @@ export const AuthForm = ({ isLogin }: { isLogin: boolean }) => {
       <Button
         type="submit"
         className="w-full bg-blue-600 hover:bg-blue-700"
+        disabled={isLoading}
       >
-        {isLogin ? "Đăng nhập" : "Đăng ký"}
+        {isLoading ? "Đang xử lý..." : (isLogin ? "Đăng nhập" : "Đăng ký")}
       </Button>
     </form>
   );
